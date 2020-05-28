@@ -2,7 +2,8 @@ import Todo from './todo'
 
 export default class TodoList {
   constructor (initialValues) {
-    this.values = initialValues || []
+    this.values = initialValues || getTodosFromLocalStorage()
+    saveTodosInLocalStorage(this.values)
   }
 
   add (title) {
@@ -48,4 +49,15 @@ export default class TodoList {
   static countTodosLeft (todos) {
     return todos.reduce((count, todo) => count + (todo.isDone ? 0 : 1), 0)
   }
+}
+
+function saveTodosInLocalStorage (todos) {
+  localStorage.setItem('todos', JSON.stringify(todos))
+}
+
+function getTodosFromLocalStorage () {
+  return JSON.parse(localStorage.getItem('todos') || '[]').map(
+    untypedTodo =>
+      new Todo(untypedTodo.title, untypedTodo.isDone, untypedTodo.id)
+  )
 }
