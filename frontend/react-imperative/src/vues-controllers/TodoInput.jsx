@@ -27,7 +27,7 @@ export default class TodoInput extends React.Component {
       <input
         className='new-todo'
         placeholder='What needs to be done?'
-        onKeyPress={this.onKeyPress.bind(this)}
+        onKeyPress={event => this.onKeyPress(event)}
         value={this.state.value}
         onChange={e => this.updateInputValue(e.target.value)}
       />

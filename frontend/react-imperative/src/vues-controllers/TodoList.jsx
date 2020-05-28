@@ -78,7 +78,7 @@ export default class TodoListComponent extends React.Component {
       <React.Fragment>
         <header className='header'>
           <h1>todos</h1>
-          <TodoInput onAddTodo={this.createTodo.bind(this)} />
+          <TodoInput onAddTodo={title => this.createTodo(title)} />
         </header>
 
         <section className='main'>
@@ -87,7 +87,7 @@ export default class TodoListComponent extends React.Component {
             type='checkbox'
             className='toggle-all'
             checked={areAllDone}
-            onChange={this.completeAll.bind(this)}
+            onChange={() => this.completeAll()}
           />
           <label htmlFor='toggle-all' />
           <ul className='todo-list'>
@@ -131,7 +131,7 @@ export default class TodoListComponent extends React.Component {
           {isAnyDone && (
             <button
               className='clear-completed'
-              onClick={this.clearCompletedTodos.bind(this)}
+              onClick={() => this.clearCompletedTodos()}
             >
               Clear completed
             </button>

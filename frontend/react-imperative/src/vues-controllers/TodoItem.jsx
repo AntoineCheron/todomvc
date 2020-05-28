@@ -1,8 +1,7 @@
 import React from 'react'
 
 import { onEnter } from '../utils'
-
-// TODO: handle the click outside event (see: https://github.com/tastejs/todomvc/blob/master/examples/react-hooks/src/containers/TodoItem.js)
+import WhenClickOutside from './WhenClickOutside'
 
 export default class TodoItem extends React.Component {
   constructor (props) {
@@ -14,10 +13,8 @@ export default class TodoItem extends React.Component {
     }
   }
 
-  componentDidUpdate (prevProps) {
-    if (this.props.todo !== prevProps.todo) {
-      this.setState({ ...this.state, todo: this.props.todo })
-    }
+  static getDerivedStateFromProps (props, state) {
+    return { ...state, todo: props.todo }
   }
 
   onEnter (event) {
@@ -33,10 +30,7 @@ export default class TodoItem extends React.Component {
   }
 
   handleViewClick (event) {
-    const isDoubleClick = true // TODO
-    if (isDoubleClick) {
-      this.setEditing(false)
-    }
+    this.setEditing(true)
   }
 
   render () {
@@ -44,7 +38,7 @@ export default class TodoItem extends React.Component {
 
     return (
       <li
-        onClick={this.handleViewClick.bind(this)}
+        onDoubleClick={event => this.handleViewClick(event)}
         className={`${isEditing ? 'editing' : ''} ${
           todo.isDone ? 'completed' : ''
         }`}
@@ -54,19 +48,25 @@ export default class TodoItem extends React.Component {
             type='checkbox'
             className='toggle'
             checked={todo.isDone}
-            onChange={this.props.onDone}
+            onChange={event => this.props.onDone(event)}
             autoFocus={true}
           />
           <label>{todo.title}</label>
-          <button className='destroy' onClick={this.props.onDelete} />
+          <button
+            className='destroy'
+            onClick={event => this.props.onDelete(event)}
+          />
         </div>
         {isEditing && (
-          <input
-            className='edit'
-            value={todo.title}
-            onChange={event => this.props.onChange(event.target.value)}
-            onKeyPress={this.onEnter}
-          />
+          <WhenClickOutside callback={() => this.setEditing(false)}>
+            <input
+              ref={this.editInputRef}
+              className='edit'
+              value={todo.title}
+              onChange={event => this.props.onChange(event.target.value)}
+              onKeyPress={event => this.onEnter(event)}
+            />
+          </WhenClickOutside>
         )}
       </li>
     )
