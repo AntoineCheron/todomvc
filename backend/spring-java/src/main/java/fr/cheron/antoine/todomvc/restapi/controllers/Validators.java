@@ -3,7 +3,7 @@ package fr.cheron.antoine.todomvc.restapi.controllers;
 import java.util.Optional;
 
 import fr.cheron.antoine.todomvc.restapi.models.ApiError;
-import fr.cheron.antoine.todomvc.restapi.models.Status;
+import fr.cheron.antoine.todomvc.commons.models.Status;
 import fr.cheron.antoine.todomvc.restapi.models.TodoCreationRequest;
 import fr.cheron.antoine.todomvc.restapi.models.TodoUpdateRequest;
 import reactor.core.publisher.Mono;

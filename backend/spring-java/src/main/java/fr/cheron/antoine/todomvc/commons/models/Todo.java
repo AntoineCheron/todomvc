@@ -1,4 +1,4 @@
-package fr.cheron.antoine.todomvc.restapi.models;
+package fr.cheron.antoine.todomvc.commons.models;
 
 import lombok.Value;
 import org.springframework.data.annotation.Id;

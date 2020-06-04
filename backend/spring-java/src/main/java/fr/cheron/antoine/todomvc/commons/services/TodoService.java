@@ -1,10 +1,10 @@
-package fr.cheron.antoine.todomvc.restapi.services;
+package fr.cheron.antoine.todomvc.commons.services;
 
 import java.util.UUID;
 
-import fr.cheron.antoine.todomvc.restapi.models.Status;
-import fr.cheron.antoine.todomvc.restapi.models.Todo;
-import fr.cheron.antoine.todomvc.restapi.repositories.TodoRepository;
+import fr.cheron.antoine.todomvc.commons.models.Status;
+import fr.cheron.antoine.todomvc.commons.models.Todo;
+import fr.cheron.antoine.todomvc.commons.repositories.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;

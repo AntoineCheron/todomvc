@@ -1,8 +1,8 @@
-package fr.cheron.antoine.todomvc.restapi.repositories;
+package fr.cheron.antoine.todomvc.commons.repositories;
 
 import fr.cheron.antoine.todomvc.restapi.models.ApiError;
-import fr.cheron.antoine.todomvc.restapi.models.Status;
-import fr.cheron.antoine.todomvc.restapi.models.Todo;
+import fr.cheron.antoine.todomvc.commons.models.Status;
+import fr.cheron.antoine.todomvc.commons.models.Todo;
 import io.r2dbc.spi.ConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.r2dbc.core.DatabaseClient;
