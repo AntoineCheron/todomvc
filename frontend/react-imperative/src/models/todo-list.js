@@ -1,13 +1,10 @@
-import Todo from './todo'
-
 export default class TodoList {
   constructor (initialValues) {
-    this.values = initialValues || getTodosFromLocalStorage()
-    saveTodosInLocalStorage(this.values)
+    this.values = initialValues
   }
 
-  add (title) {
-    return new TodoList(this.values.concat(new Todo(title)))
+  add (todo) {
+    return new TodoList(this.values.concat(todo))
   }
 
   updateTodo (id, newValue) {
@@ -49,15 +46,4 @@ export default class TodoList {
   static countTodosLeft (todos) {
     return todos.reduce((count, todo) => count + (todo.isDone ? 0 : 1), 0)
   }
-}
-
-function saveTodosInLocalStorage (todos) {
-  localStorage.setItem('todos', JSON.stringify(todos))
-}
-
-function getTodosFromLocalStorage () {
-  return JSON.parse(localStorage.getItem('todos') || '[]').map(
-    untypedTodo =>
-      new Todo(untypedTodo.title, untypedTodo.isDone, untypedTodo.id)
-  )
 }

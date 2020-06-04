@@ -4,11 +4,13 @@ import { NavLink } from 'react-router-dom'
 import TodoList from '../models/todo-list'
 import TodoInput from './TodoInput'
 import TodoItem from './TodoItem'
+import getTodoController from '../controllers/getTodoController'
 
 export default class TodoListComponent extends React.Component {
   constructor (props) {
     super(props)
 
+    this.todoController = getTodoController()
     this.state = this.getInitialState(props)
   }
 
@@ -19,9 +21,8 @@ export default class TodoListComponent extends React.Component {
   }
 
   getInitialState (props) {
-    // TODO use local storage
     return {
-      todos: new TodoList(),
+      todos: this.todoController.getTodos(),
       filter: props.match.params.filter
     }
   }
@@ -31,24 +32,25 @@ export default class TodoListComponent extends React.Component {
   }
 
   createTodo (title) {
-    const newTodos = this.state.todos.add(title)
-    this.updateTodos(newTodos)
+    this.todoController.add(title).then(todos => this.updateTodos(todos))
   }
 
   updateTodoTitle (todo, newTitle) {
     const newValue = todo.updateTitle(newTitle)
-    const newTodos = this.state.todos.updateTodo(todo.id, newValue)
-    this.updateTodos(newTodos)
+    this.todoController
+      .updateTodo(todo.id, newValue)
+      .then(todos => this.updateTodos(todos))
   }
 
   switchTodoIsDoneStatus (todo) {
     const newValue = todo.isDone === true ? todo.uncomplete() : todo.complete()
-    const newTodos = this.state.todos.updateTodo(todo.id, newValue)
-    this.updateTodos(newTodos)
+    this.todoController
+      .updateTodo(todo.id, newValue)
+      .then(todos => this.updateTodos(todos))
   }
 
   deleteTodo (id) {
-    this.updateTodos(this.state.todos.delete(id))
+    this.todoController.delete(id).then(todos => this.updateTodos(todos))
   }
 
   updateTodos (newTodos) {
@@ -97,9 +99,7 @@ export default class TodoListComponent extends React.Component {
                   key={todo.id}
                   todo={todo}
                   onChange={newTitle => this.updateTodoTitle(todo, newTitle)}
-                  onDelete={() =>
-                    this.updateTodos(this.state.todos.delete(todo.id))
-                  }
+                  onDelete={() => this.deleteTodo(todo.id)}
                   onDone={() => this.switchTodoIsDoneStatus(todo)}
                 />
               )

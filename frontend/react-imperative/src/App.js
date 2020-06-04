@@ -2,8 +2,8 @@ import React from 'react'
 import { BrowserRouter, Route } from 'react-router-dom'
 import 'todomvc-app-css/index.css'
 
-import Footer from './vues-controllers/Footer'
-import TodoListComponent from './vues-controllers/TodoList'
+import Footer from './vues/Footer'
+import TodoListComponent from './vues/TodoList'
 
 function App () {
   return (
