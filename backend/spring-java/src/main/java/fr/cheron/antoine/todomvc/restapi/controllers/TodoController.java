@@ -1,9 +1,9 @@
 package fr.cheron.antoine.todomvc.restapi.controllers;
 
-import fr.cheron.antoine.todomvc.restapi.models.Todo;
+import fr.cheron.antoine.todomvc.commons.models.Todo;
 import fr.cheron.antoine.todomvc.restapi.models.TodoCreationRequest;
 import fr.cheron.antoine.todomvc.restapi.models.TodoUpdateRequest;
-import fr.cheron.antoine.todomvc.restapi.services.TodoService;
+import fr.cheron.antoine.todomvc.commons.services.TodoService;
 import org.reactivestreams.Publisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
