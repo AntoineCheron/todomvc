@@ -14,6 +14,10 @@ export default class TodoListComponent extends React.Component {
     this.state = this.getInitialState(props)
   }
 
+  componentDidMount () {
+    // TODO : fetch data
+  }
+
   componentDidUpdate (prevProps) {
     if (this.props.match.params.filter !== prevProps.match.params.filter) {
       this.setState({ ...this.state, filter: this.props.match.params.filter })
