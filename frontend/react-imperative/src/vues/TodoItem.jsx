@@ -40,14 +40,14 @@ export default class TodoItem extends React.Component {
       <li
         onDoubleClick={event => this.handleViewClick(event)}
         className={`${isEditing ? 'editing' : ''} ${
-          todo.completed ? 'completed' : ''
+          todo.isDone ? 'completed' : ''
         }`}
       >
         <div className='view'>
           <input
             type='checkbox'
             className='toggle'
-            checked={todo.completed}
+            checked={todo.isDone}
             onChange={event => this.props.onDone(event)}
             autoFocus={true}
           />
@@ -60,7 +60,6 @@ export default class TodoItem extends React.Component {
         {isEditing && (
           <WhenClickOutside callback={() => this.setEditing(false)}>
             <input
-              ref={this.editInputRef}
               className='edit'
               value={todo.title}
               onChange={event => this.props.onChange(event.target.value)}
