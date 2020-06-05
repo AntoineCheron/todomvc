@@ -4,12 +4,18 @@ import { NavLink } from 'react-router-dom'
 import TodoList from '../models/todo-list'
 import TodoInput from './TodoInput'
 import TodoItem from './TodoItem'
+import getTodoController from '../controllers/getTodoController'
 
 export default class TodoListComponent extends React.Component {
   constructor (props) {
     super(props)
 
+    this.todoController = getTodoController()
     this.state = this.getInitialState(props)
+  }
+
+  componentDidMount () {
+    this.todoController.fetch().then(todos => this.updateTodos(todos))
   }
 
   componentDidUpdate (prevProps) {
@@ -19,9 +25,8 @@ export default class TodoListComponent extends React.Component {
   }
 
   getInitialState (props) {
-    // TODO use local storage
     return {
-      todos: new TodoList(),
+      todos: this.todoController.getTodos(),
       filter: props.match.params.filter
     }
   }
@@ -30,41 +35,41 @@ export default class TodoListComponent extends React.Component {
     return this.state.todos.withStatus(this.state.filter)
   }
 
-  createTodo (title) {
-    const newTodos = this.state.todos.add(title)
-    this.updateTodos(newTodos)
+  async createTodo (title) {
+    const { allTodos } = await this.todoController.add(title)
+    this.updateTodos(allTodos)
   }
 
-  updateTodoTitle (todo, newTitle) {
+  async updateTodoTitle (todo, newTitle) {
     const newValue = todo.updateTitle(newTitle)
-    const newTodos = this.state.todos.updateTodo(todo.id, newValue)
-    this.updateTodos(newTodos)
+    const todos = await this.todoController.updateTodo(newValue)
+    this.updateTodos(todos)
   }
 
-  switchTodoIsDoneStatus (todo) {
-    const newValue = todo.isDone === true ? todo.uncomplete() : todo.complete()
-    const newTodos = this.state.todos.updateTodo(todo.id, newValue)
-    this.updateTodos(newTodos)
+  async switchTodoCompletedStatus (todo) {
+    const newValue =
+      todo.completed === true ? todo.uncomplete() : todo.complete()
+    const todos = await this.todoController.updateTodo(newValue)
+    this.updateTodos(todos)
   }
 
-  deleteTodo (id) {
-    this.updateTodos(this.state.todos.delete(id))
+  async deleteTodo (id) {
+    const todos = await this.todoController.delete(id)
+    this.updateTodos(todos)
   }
 
   updateTodos (newTodos) {
     this.setState({ ...this.state, todos: newTodos })
   }
 
-  clearCompletedTodos () {
-    const newTodos = this.getTodosToDisplay()
-      .filter(todo => todo.isDone)
-      .reduce((todoList, todo) => todoList.delete(todo), this.state.todos)
-
+  async clearCompletedTodos () {
+    const newTodos = await this.todoController.deleteMany('completed')
     this.updateTodos(newTodos)
   }
 
-  completeAll () {
-    this.updateTodos(this.state.todos.completeAll())
+  async switchStatusOfAllTodos () {
+    const todos = await this.todoController.switchStatusOfAllTodos()
+    this.updateTodos(todos)
   }
 
   render () {
@@ -87,7 +92,7 @@ export default class TodoListComponent extends React.Component {
             type='checkbox'
             className='toggle-all'
             checked={areAllDone}
-            onChange={() => this.completeAll()}
+            onChange={() => this.switchStatusOfAllTodos()}
           />
           <label htmlFor='toggle-all' />
           <ul className='todo-list'>
@@ -97,10 +102,8 @@ export default class TodoListComponent extends React.Component {
                   key={todo.id}
                   todo={todo}
                   onChange={newTitle => this.updateTodoTitle(todo, newTitle)}
-                  onDelete={() =>
-                    this.updateTodos(this.state.todos.delete(todo.id))
-                  }
-                  onDone={() => this.switchTodoIsDoneStatus(todo)}
+                  onDelete={() => this.deleteTodo(todo.id)}
+                  onDone={() => this.switchTodoCompletedStatus(todo)}
                 />
               )
             })}
