@@ -1,4 +1,4 @@
-package fr.cheron.antoine.todomvc.restapi;
+package fr.cheron.antoine.todomvc.commons;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.config.CorsRegistry;

@@ -20,7 +20,7 @@ export default class LocalStorageTodoController extends TodoController {
 
   async add (title) {
     const todo = new Todo(title)
-    const newTodosState = this._mapTodosAndSave(todos => todos.add(todo))
+    const newTodosState = this._mapAndUpdateTodosState(todos => todos.add(todo))
     return {
       allTodos: newTodosState,
       createdTodo: todo
@@ -28,31 +28,19 @@ export default class LocalStorageTodoController extends TodoController {
   }
 
   async updateTodo (newValue) {
-    return this._mapTodosAndSave(todos => todos.updateTodo(newValue))
+    return this._mapAndUpdateTodosState(todos => todos.updateTodo(newValue))
   }
 
   async delete (id) {
-    return this._mapTodosAndSave(todos => todos.delete(id))
+    return this._mapAndUpdateTodosState(todos => todos.delete(id))
   }
 
   // status must be 'all' or 'completed' or 'active'
   async deleteMany (status) {
-    return this._mapTodosAndSave(todos => todos.deleteMany(status))
+    return this._mapAndUpdateTodosState(todos => todos.deleteMany(status))
   }
 
-  async setStatusOfAll (complete) {
-    return this._mapTodosAndSave(todos => {
-      if (complete) {
-        return todos.completeAll()
-      } else {
-        return todos.uncompleteAll()
-      }
-    })
-  }
-
-  _mapTodosAndSave (mapper) {
-    const newTodosState = mapper(this.todos)
-
+  _updateTodosState (newTodosState) {
     this.todos = newTodosState
 
     localStorage.setItem(

@@ -1,13 +1,14 @@
 import * as Config from '../config'
 import LocalStorageTodoController from './LocalStorageTodoController'
+import GraphQLTodoController from './GraphQLTodoController'
 import RestApiTodoController from './RestApiTodoController'
 
 export default function getTodoController () {
   switch (Config.featureToggle.persistance) {
     case 'rest-api':
-      return new RestApiTodoController()
+      return new RestApiTodoController(Config.restApi.url)
     case 'graphql':
-      return null
+      return new GraphQLTodoController(Config.graphqlApi.url)
     case 'in-memory':
       return new LocalStorageTodoController()
     default:

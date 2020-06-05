@@ -1,11 +1,15 @@
 import axios from 'axios'
 
-import * as Config from '../config'
 import { TodoController } from './TodoController'
 import Todo from '../models/todo'
 import TodoList from '../models/todo-list'
 
 export default class RestApiTodoController extends TodoController {
+  constructor (baseApiUrl) {
+    super()
+    this.baseApiUrl = baseApiUrl
+  }
+
   async fetch () {
     const response = await this._httpCaller().get('/todos')
     const untypedTodos = response.data
@@ -48,45 +52,12 @@ export default class RestApiTodoController extends TodoController {
   // status must be 'all' or 'completed' or 'active'
   async deleteMany (status) {
     await this._httpCaller().delete(`/todos?status=${status}`)
-    const newTodosState = await this.fetch()
-    return this._updateTodosState(newTodosState)
-  }
-
-  async setStatusOfAll (complete) {
-    const statusOfTodosToModify = complete ? 'active' : 'completed'
-    const actionToPerformOnTodos = complete
-      ? todo => todo.complete()
-      : todo => todo.uncomplete()
-
-    const todosToUpdate = this.getTodos().withStatus(statusOfTodosToModify)
-    const apiCallsToCompleteTodos = todosToUpdate.map(todo =>
-      this.updateTodo(actionToPerformOnTodos(todo))
-    )
-
-    const subsequentTodosState = await Promise.all(apiCallsToCompleteTodos)
-
-    if (subsequentTodosState.length > 0) {
-      const newTodosState =
-        subsequentTodosState[subsequentTodosState.length - 1]
-      return this._updateTodosState(newTodosState)
-    } else {
-      return this.getTodos()
-    }
-  }
-
-  _mapAndUpdateTodosState (mapper) {
-    const newTodosState = mapper(this.getTodos())
-    return this._updateTodosState(newTodosState)
-  }
-
-  _updateTodosState (newTodosState) {
-    this.todos = newTodosState
-    return newTodosState
+    return await this.fetch()
   }
 
   _httpCaller () {
     return axios.create({
-      baseURL: Config.restApi.url
+      baseURL: this.baseApiUrl
     })
   }
 }
