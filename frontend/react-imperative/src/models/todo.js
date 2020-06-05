@@ -5,10 +5,10 @@ import { guid } from '../utils'
   Hence, any modification of it leads to the creation of a new instance.
 */
 export default class Todo {
-  constructor (title, isDone, id) {
+  constructor (title, completed, id) {
     this.id = id || guid()
     this.title = title
-    this.isDone = isDone || false
+    this.completed = completed || false
   }
 
   updateTitle (newTitle) {
@@ -16,17 +16,17 @@ export default class Todo {
   }
 
   complete () {
-    return this._copy({ isDone: true })
+    return this._copy({ completed: true })
   }
 
   uncomplete () {
-    return this._copy({ isDone: false })
+    return this._copy({ completed: false })
   }
 
-  _copy ({ title, isDone }) {
+  _copy ({ title, completed }) {
     return new Todo(
       title || this.title,
-      isDone !== undefined ? isDone : this.isDone,
+      completed !== undefined ? completed : this.completed,
       this.id
     )
   }
