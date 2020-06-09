@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { onEnter } from '../utils'
+import { onEnter } from '../commons/utils'
 import WhenClickOutside from './WhenClickOutside'
 
 export default class TodoItem extends React.Component {
@@ -40,14 +40,14 @@ export default class TodoItem extends React.Component {
       <li
         onDoubleClick={event => this.handleViewClick(event)}
         className={`${isEditing ? 'editing' : ''} ${
-          todo.isDone ? 'completed' : ''
+          todo.completed ? 'completed' : ''
         }`}
       >
         <div className='view'>
           <input
             type='checkbox'
             className='toggle'
-            checked={todo.isDone}
+            checked={todo.completed}
             onChange={event => this.props.onDone(event)}
             autoFocus={true}
           />

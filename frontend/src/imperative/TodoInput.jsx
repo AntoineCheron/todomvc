@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { onEnter } from '../utils'
+import { onEnter } from '../commons/utils'
 
 export default class TodoInput extends React.Component {
   constructor (props) {

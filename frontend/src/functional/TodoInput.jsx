@@ -1,18 +1,21 @@
 import React, { useState, useCallback } from 'react'
 
-import { onEnter } from '../utils'
+import { onEnter } from '../commons/utils'
 
 export default function TodoInput ({ onAddTodo }) {
   const [value, setValue] = useState('')
 
-  const onKeyPress = useCallback(event => {
-    onEnter(event, () => {
-      if (value !== '') {
-        onAddTodo(this.state.value)
-        setValue('')
-      }
-    })
-  })
+  const onKeyPress = useCallback(
+    event => {
+      onEnter(event, () => {
+        if (value !== '') {
+          onAddTodo(value)
+          setValue('')
+        }
+      })
+    },
+    [onAddTodo, value, setValue]
+  )
 
   return (
     <input

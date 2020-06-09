@@ -1,4 +1,4 @@
-import * as Config from '../config'
+import * as Config from '../../config'
 import LocalStorageTodoController from './LocalStorageTodoController'
 import GraphQLTodoController from './GraphQLTodoController'
 import RestApiTodoController from './RestApiTodoController'

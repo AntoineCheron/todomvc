@@ -1,10 +1,10 @@
-import React, { useMemo, useEffect } from 'react'
+import React, { useMemo, useEffect, useState } from 'react'
 import { NavLink, useParams } from 'react-router-dom'
 
-import TodoList from '../models/todo-list'
+import TodoList from '../commons/models/todo-list'
 import TodoInput from './TodoInput'
 import TodoItem from './TodoItem'
-import getTodoController from '../controllers/getTodoController'
+import getTodoController from '../commons/controllers/getTodoController'
 
 export default function TodoListComponent () {
   const [todoController] = useState(getTodoController())
@@ -21,27 +21,26 @@ export default function TodoListComponent () {
   const isAnyDone = left < todosToDisplay.length
   const areAllDone = left === todosToDisplay.length
 
-  useEffect(() => todoController.fetch().then(setTodos), [])
+  useEffect(() => {
+    todoController.fetch().then(setTodos)
+  }, [])
 
-  const createTodo = useCallback(title =>
-    todoController.add(title).then(setTodos)
-  )
-  const deleteTodo = useCallback(id => todoController.delete(id).then(setTodos))
-  const clearCompletedTodos = useCallback(() =>
+  const createTodo = title =>
+    todoController.add(title).then(({ allTodos }) => setTodos(allTodos))
+  const deleteTodo = id => todoController.delete(id).then(setTodos)
+  const clearCompletedTodos = () =>
     todoController.deleteMany('completed').then(setTodos)
-  )
-  const switchStatusOfAllTodos = useCallback(() =>
+  const switchStatusOfAllTodos = () =>
     todoController.switchStatusOfAllTodos().then(setTodos)
-  )
-  const updateTodoTitle = useCallback((todo, newTitle) => {
+  const updateTodoTitle = (todo, newTitle) => {
     const newValue = todo.updateTitle(newTitle)
     todoController.updateTodo(newValue).then(setTodos)
-  })
-  const switchTodoCompletedStatus = useCallback(todo => {
+  }
+  const switchTodoCompletedStatus = todo => {
     const newValue =
       todo.completed === true ? todo.uncomplete() : todo.complete()
     todoController.updateTodo(newValue).then(setTodos)
-  })
+  }
 
   return (
     <React.Fragment>
