@@ -10,6 +10,16 @@ So, in the [src](/src) directory you can find three folders:
 - [imperative](/src/react-imperative) that uses the implementation of the view with React classes
 - [commons](/src/commons) that contains all the code that is common to both version, which includes controllers and models
 
+## How to use and configure
+
+You can configure this frontend application in the [src/config.js](/src/config.js) file. Options are:
+
+First, you can configure whether to use the imperative or functional version by setting the `featureToggle.app` variable.
+
+Second, you can choose how to persist the data. The first option is `in-memory` which stores the todos in the local storage of the browser. If you choose this option, you won't have to use any the backend proposed in this repository. The two other options are `rest-api` and `graphql`. Their name is explicit, they require to configure the base url of the service. An example is already given in the config file.
+
+When you're all set with the configuration, use the scripts below to start the app. The easiest way to get started is to set `featureToggle.persistence` to `in-memory` and start the app locally typing `yarn start` in the terminal.
+
 ## Available Scripts
 
 In the project directory, you can run:
