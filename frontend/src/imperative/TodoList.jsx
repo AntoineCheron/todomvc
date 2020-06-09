@@ -1,10 +1,10 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 
-import TodoList from '../models/todo-list'
+import TodoList from '../commons/models/todo-list'
 import TodoInput from './TodoInput'
 import TodoItem from './TodoItem'
-import getTodoController from '../controllers/getTodoController'
+import getTodoController from '../commons/controllers/getTodoController'
 
 export default class TodoListComponent extends React.Component {
   constructor (props) {

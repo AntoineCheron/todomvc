@@ -1,5 +1,6 @@
 export const featureToggle = {
-  persistance: 'graphql' // 'rest-api' or 'graphql' or 'in-memory'
+  persistance: 'rest-api', // 'rest-api' or 'graphql' or 'in-memory'
+  app: 'imperative' // 'imperative' or 'functional'
 }
 
 export const restApi = {

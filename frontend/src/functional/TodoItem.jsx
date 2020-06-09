@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
-import { onEnter as onEnterUtils } from '../utils'
+import { onEnter as onEnterUtils } from '../commons/utils'
 import WhenClickOutside from './WhenClickOutside'
 
 // props: { todo, onDone, onDelete, onChange }
@@ -8,14 +8,18 @@ export default function TodoItem (props) {
   const [todo, setTodo] = useState(props.todo)
   const [isEditing, setEditing] = useState(false)
 
-  useEffect(() => setTodo(props.todo), [props.todo])
+  useEffect(() => {
+    setTodo(props.todo)
+  }, [props.todo])
 
-  const onEnter = useCallback(event =>
-    onEnterUtils(event, () => {
-      if (todo.title !== '') {
-        setEditing(false)
-      }
-    })
+  const onEnter = useCallback(
+    event =>
+      onEnterUtils(event, () => {
+        if (todo.title !== '') {
+          setEditing(false)
+        }
+      }),
+    [todo, setEditing]
   )
 
   return (
