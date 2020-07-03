@@ -5,3 +5,7 @@ target
 .gradle
 out
 .vscode
+.classpath
+.project
+bin/
+.settings

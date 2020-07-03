@@ -33,7 +33,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Todos'
+                $ref: '#/components/schemas/TodoCollection'
 
     delete:
       summary: Delete the todos with the selected status, by default the completed todos
@@ -131,6 +131,11 @@ components:
       scheme: basic
       description: Basic login/password http authentication
   schemas:
+    TodoCollection:
+      type: object
+      properties:
+        todos:
+          $ref: '#/components/schemas/Todos'
     Todos:
       type: array
       items:

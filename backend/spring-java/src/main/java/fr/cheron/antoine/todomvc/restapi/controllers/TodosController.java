@@ -1,7 +1,7 @@
 package fr.cheron.antoine.todomvc.restapi.controllers;
 
 import fr.cheron.antoine.todomvc.commons.models.Status;
-import fr.cheron.antoine.todomvc.commons.models.Todo;
+import fr.cheron.antoine.todomvc.commons.models.TodoCollection;
 import fr.cheron.antoine.todomvc.commons.services.TodoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -26,10 +25,12 @@ public class TodosController {
   }
 
   @GetMapping
-  public Flux<Todo> list(@RequestParam(value="status", required=false) String status) {
+  public Mono<TodoCollection> list(@RequestParam(value="status", required=false) String status) {
     return Validators.validateStatus(status, Status.ALL)
       .flux()
-      .flatMap(this.todoService::list);
+      .flatMap(this.todoService::list)
+      .collectList()
+      .map(TodoCollection::new);
   }
 
   @DeleteMapping @ResponseStatus(HttpStatus.NO_CONTENT)
