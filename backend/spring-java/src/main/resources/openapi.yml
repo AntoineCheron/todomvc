@@ -1,0 +1,224 @@
+openapi: '3.0.3'
+info:
+  version: 1.0.0
+  title: TODO MVC REST API
+  contact:
+    name: Antoine Cheron
+    email: cheron.antoine@gmail.com
+servers:
+  - url: 'http://localhost:8080/rest'
+    description: 'local server'
+
+paths:
+  /todos:
+    get:
+      summary: Get all the todos
+      operationId: listTodos
+      x-@id: http://evolvable-by-design.github.io/vocabs/todomvc#listTodos
+      tags:
+        - todo
+      parameters:
+        - name: status
+          in: query
+          description: The status expected for the queried todos
+          x-@id: http://evolvable-by-design.github.io/vocabs/todomvc#status
+          required: false
+          schema:
+            type: string
+            enum:
+              - all
+              - completed
+              - active
+            default: all
+      responses:
+        '200':
+          description: List of todos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todos'
+          links:
+            createTodo:
+              operationId: createTodo
+              x-@relation: http://evolvable-by-design.github.io/vocabs/todomvc#rel/create
+            deleteMany:
+              operationId: deleteTodosByStatus
+              x-@relation: http://evolvable-by-design.github.io/vocabs/todomvc#rel/deleteMany
+
+    delete:
+      summary: Delete the todos with the selected status, by default the completed todos
+      operationId: deleteTodosByStatus
+      x-@id: http://evolvable-by-design.github.io/vocabs/todomvc#deleteManyTodos
+      tags:
+        - todo
+      parameters:
+        - name: status
+          in: query
+          description: The status expected for the queried todos
+          x-@id: http://evolvable-by-design.github.io/vocabs/todomvc#status
+          required: false
+          schema:
+            type: string
+            enum:
+              - all
+              - completed
+              - active
+            default: completed
+      responses:
+        '204':
+          description: Confirmation
+
+  /todo:
+    post:
+      summary: Create a new todo
+      operationId: createTodo
+      x-@id: http://evolvable-by-design.github.io/vocabs/todomvc#createTodo
+      x-@type: https://schema.org/CreateAction
+      tags:
+        - todo
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TodoCreationRequest'
+      responses:
+        '201':
+          description: The newly created todo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+          links:
+            update:
+              operationId: updateTodo
+              x-@relation: http://evolvable-by-design.github.io/vocabs/todomvc#rel/update
+              parameters:
+                id: '$response.body#/id'
+                title: '$response.body#/title'
+                completed: '$response.body#/completed'
+            delete:
+              operationId: deleteTodo
+              x-@relation: http://evolvable-by-design.github.io/vocabs/todomvc#rel/delete
+              parameters:
+                id: '$response.body#/id'
+            listAll:
+              operationId: listTodos
+              x-@relation: http://evolvable-by-design.github.io/vocabs/todomvc#rel/listAll
+
+  /todo/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          x-@id: http://evolvable-by-design.github.io/vocabs/todomvc#todoId
+          x-@type: '@id'
+    put:
+      summary: Update an existing todo
+      operationId: updateTodo
+      x-@id: http://evolvable-by-design.github.io/vocabs/todomvc#updateTodo
+      tags:
+        - todo
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TodoUpdateRequest'
+      responses:
+        '200':
+          description: New state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+          links:
+            update:
+              operationId: updateTodo
+              x-@relation: http://evolvable-by-design.github.io/vocabs/todomvc#rel/update
+              parameters:
+                id: '$response.body#/id'
+                title: '$response.body#/title'
+                completed: '$response.body#/completed'
+            delete:
+              operationId: deleteTodo
+              x-@relation: http://evolvable-by-design.github.io/vocabs/todomvc#rel/delete
+              parameters:
+                id: '$response.body#/id'
+            listAll:
+              operationId: listTodos
+              x-@relation: http://evolvable-by-design.github.io/vocabs/todomvc#rel/listAll
+    delete:
+      summary: Delete the todo
+      operationId: deleteTodoById
+      x-@id: http://evolvable-by-design.github.io/vocabs/todomvc#deleteTodo
+      tags:
+        - todo
+      responses:
+        '204':
+          description: Confirmation
+          links:
+            listAll:
+              operationId: listTodos
+              x-@relation: http://evolvable-by-design.github.io/vocabs/todomvc#rel/listAll
+
+components:
+  parameters:
+    status:
+      name: status
+      in: query
+      description: The status expected for the queried todos
+      x-@id: http://evolvable-by-design.github.io/vocabs/todomvc#status
+      required: false
+      schema:
+        type: string
+        enum:
+          - all
+          - completed
+          - active
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: Basic login/password http authentication
+  schemas:
+    Todos:
+      x-@type: http://evolvable-by-design.github.io/vocabs/todomvc#Todos
+      type: array
+      items:
+        $ref: '#/components/schemas/Todo'
+    Todo:
+      x-@type: http://evolvable-by-design.github.io/vocabs/todomvc#Todo
+      type: object
+      required: ['id', 'title', 'completed']
+      properties:
+        id:
+          type: string
+          x-@id: http://evolvable-by-design.github.io/vocabs/todomvc#todoId
+          x-@type: '@id'
+        title:
+          type: string
+          minLength: 1
+          x-@id: http://schema.org/name
+        completed:
+          type: boolean
+          x-@id: http://evolvable-by-design.github.io/vocabs/todomvc#completed
+    TodoCreationRequest:
+      type: object
+      required: ['title']
+      properties:
+        title:
+          type: string
+          minLength: 1
+          x-@id: http://schema.org/name
+    TodoUpdateRequest:
+      type: object
+      required: ['title', 'completed']
+      properties:
+        title:
+          type: string
+          minLength: 1
+          x-@id: http://schema.org/name
+        completed:
+          type: boolean
+          x-@id: http://evolvable-by-design.github.io/vocabs/todomvc#completed

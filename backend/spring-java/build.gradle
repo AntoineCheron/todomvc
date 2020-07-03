@@ -24,6 +24,7 @@ dependencies {
     // -------------- REST API DEPENDENCIES --------------
 
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.7.4'
 
     // -------------- GraphQL DEPENDENCIES --------------
 

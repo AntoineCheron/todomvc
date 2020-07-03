@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 import com.github.antoinecheron.todomvc.commons.models.Todo;
+import com.github.antoinecheron.todomvc.restapi.hypermedia.HypermediaRepresentation;
 import com.github.antoinecheron.todomvc.restapi.models.TodoCreationRequest;
 import com.github.antoinecheron.todomvc.restapi.models.TodoUpdateRequest;
 import com.github.antoinecheron.todomvc.commons.services.TodoService;
@@ -29,18 +30,27 @@ public class TodoController {
   }
 
   @PostMapping @ResponseStatus(HttpStatus.CREATED)
-  public Mono<Todo> createTodo (@RequestBody Publisher<TodoCreationRequest> todoCreationRequestStream) {
+  public Mono<HypermediaRepresentation<Todo>> createTodo (@RequestBody Publisher<TodoCreationRequest> todoCreationRequestStream) {
     return Mono.fromDirect(todoCreationRequestStream)
       .flatMap(Validators::validateTodoCreationRequest)
-      .flatMap(todoCreationRequest -> todoService.create(todoCreationRequest.getTitle()));
+      .flatMap(todoCreationRequest -> todoService.create(todoCreationRequest.getTitle()))
+      .map(todo -> HypermediaRepresentation.Builder.of(todo)
+        .withLink("update")
+        .withLink("delete")
+        .withLink("listAll").build()
+      );
   }
 
-  @PutMapping("/{id}") @ResponseStatus(HttpStatus.NO_CONTENT)
-  public Mono<Void> updateTodo(@PathVariable String id, @RequestBody Publisher<TodoUpdateRequest> todoUpdateRequestStream) {
+  @PutMapping("/{id}")
+  public Mono<HypermediaRepresentation<Todo>> updateTodo(@PathVariable String id, @RequestBody Publisher<TodoUpdateRequest> todoUpdateRequestStream) {
     return Mono.fromDirect(todoUpdateRequestStream)
       .flatMap(Validators::validateTodoUpdateRequest)
       .flatMap(todoUpdateRequest -> todoService.update(id, todoUpdateRequest.getTitle(), todoUpdateRequest.isCompleted()))
-      .then();
+      .map(todo -> HypermediaRepresentation.Builder.of(todo)
+        .withLink("update")
+        .withLink("delete")
+        .withLink("listAll").build()
+      );
   }
 
   @DeleteMapping("/{id}") @ResponseStatus(HttpStatus.NO_CONTENT)
