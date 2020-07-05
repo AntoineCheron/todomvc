@@ -36,7 +36,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Todos'
+                $ref: '#/components/schemas/TodoCollection'
           links:
             createTodo:
               operationId: createTodo
@@ -97,7 +97,7 @@ paths:
                 title: '$response.body#/title'
                 completed: '$response.body#/completed'
             delete:
-              operationId: deleteTodo
+              operationId: deleteTodoById
               x-@relation: http://evolvable-by-design.github.io/vocabs/todomvc#rel/delete
               parameters:
                 id: '$response.body#/id'
@@ -112,8 +112,9 @@ paths:
         required: true
         schema:
           type: string
-          x-@id: http://evolvable-by-design.github.io/vocabs/todomvc#todoId
-          x-@type: '@id'
+          x-@id:
+            - http://evolvable-by-design.github.io/vocabs/todomvc#todoId
+            - '@id'
     put:
       summary: Update an existing todo
       operationId: updateTodo
@@ -141,7 +142,7 @@ paths:
                 title: '$response.body#/title'
                 completed: '$response.body#/completed'
             delete:
-              operationId: deleteTodo
+              operationId: deleteTodoById
               x-@relation: http://evolvable-by-design.github.io/vocabs/todomvc#rel/delete
               parameters:
                 id: '$response.body#/id'
@@ -182,6 +183,12 @@ components:
       scheme: basic
       description: Basic login/password http authentication
   schemas:
+    TodoCollection:
+      type: object
+      x-@type: http://evolvable-by-design.github.io/vocabs/todomvc#TodoCollection
+      properties:
+        todos:
+          $ref: '#/components/schemas/Todos'
     Todos:
       x-@type: http://evolvable-by-design.github.io/vocabs/todomvc#Todos
       type: array
@@ -194,8 +201,9 @@ components:
       properties:
         id:
           type: string
-          x-@id: http://evolvable-by-design.github.io/vocabs/todomvc#todoId
-          x-@type: '@id'
+          x-@id:
+            - http://evolvable-by-design.github.io/vocabs/todomvc#todoId
+            - '@id'
         title:
           type: string
           minLength: 1

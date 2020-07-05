@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import fr.cheron.antoine.todomvc.Application;
+import com.github.antoinecheron.todomvc.commons.JacksonConfiguration;
 import lombok.Value;
 import lombok.extern.log4j.Log4j2;
 
@@ -51,9 +51,12 @@ public class HypermediaRepresentation<T> {
   }
 
   @Log4j2
-  public static class Serializer extends StdSerializer<HypermediaRepresentation> {
+  public static class Serializer extends JsonSerializer<HypermediaRepresentation> {
 
-    public Serializer() { super(HypermediaRepresentation.class); }
+    @Override
+    public Class<HypermediaRepresentation> handledType() {
+      return HypermediaRepresentation.class;
+    }
 
     @Override
     public void serialize(HypermediaRepresentation value, JsonGenerator gen, SerializerProvider provider) throws IOException {
@@ -62,7 +65,7 @@ public class HypermediaRepresentation<T> {
 
         provider.defaultSerializeValue(value.resource, gen);
       } else {
-        final var objectMapper = Application.getJacksonInstanceConfigured();
+        final var objectMapper = JacksonConfiguration.objectMapper();
 
         final ObjectNode mainObject = objectMapper.convertValue(value.resource, ObjectNode.class);
         final ArrayNode linksArray = mainObject.putArray("_links");

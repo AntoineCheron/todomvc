@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import lombok.Value;
 
 public abstract class Link {
@@ -14,9 +14,12 @@ public abstract class Link {
   public static final class Simple extends Link {
     private final String value;
 
-    public static class Serializer extends StdSerializer<Simple> {
+    public static class Serializer extends JsonSerializer<Simple> {
 
-      public Serializer() { super(Simple.class); }
+      @Override
+      public Class<Simple> handledType() {
+        return Simple.class;
+      }
 
       @Override
       public void serialize(Simple value, JsonGenerator gen, SerializerProvider provider) throws IOException {
@@ -30,9 +33,12 @@ public abstract class Link {
     private final String relation;
     private final Map<String, Object> parameters;
 
-    public static class Serializer extends StdSerializer<WithParameters> {
+    public static class Serializer extends JsonSerializer<WithParameters> {
 
-      public Serializer() { super(WithParameters.class); }
+      @Override
+      public Class<WithParameters> handledType() {
+        return WithParameters.class;
+      }
 
       @Override
       public void serialize(WithParameters value, JsonGenerator gen, SerializerProvider provider) throws IOException {
@@ -40,6 +46,23 @@ public abstract class Link {
         gen.writeStringField("relation", value.relation);
         provider.defaultSerializeField("parameters", value.parameters, gen);
         gen.writeEndObject();
+      }
+    }
+  }
+
+  public static class Serializer extends JsonSerializer<Link> {
+
+    @Override
+    public Class<Link> handledType() {
+      return Link.class;
+    }
+
+    @Override
+    public void serialize(Link value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+      if (value instanceof Link.Simple) {
+        provider.defaultSerializeValue((Link.Simple) value, gen);
+      } else if (value instanceof Link.WithParameters) {
+        provider.defaultSerializeValue((Link.WithParameters) value, gen);
       }
     }
   }

@@ -34,11 +34,7 @@ public class TodoController {
     return Mono.fromDirect(todoCreationRequestStream)
       .flatMap(Validators::validateTodoCreationRequest)
       .flatMap(todoCreationRequest -> todoService.create(todoCreationRequest.getTitle()))
-      .map(todo -> HypermediaRepresentation.Builder.of(todo)
-        .withLink("update")
-        .withLink("delete")
-        .withLink("listAll").build()
-      );
+      .map(TodoController::addHypermediaControls);
   }
 
   @PutMapping("/{id}")
@@ -46,16 +42,20 @@ public class TodoController {
     return Mono.fromDirect(todoUpdateRequestStream)
       .flatMap(Validators::validateTodoUpdateRequest)
       .flatMap(todoUpdateRequest -> todoService.update(id, todoUpdateRequest.getTitle(), todoUpdateRequest.isCompleted()))
-      .map(todo -> HypermediaRepresentation.Builder.of(todo)
-        .withLink("update")
-        .withLink("delete")
-        .withLink("listAll").build()
-      );
+      .map(TodoController::addHypermediaControls);
   }
 
   @DeleteMapping("/{id}") @ResponseStatus(HttpStatus.NO_CONTENT)
   public Mono<Void> deleteTodo(@PathVariable String id) {
     return this.todoService.delete(id);
+  }
+
+  public static HypermediaRepresentation<Todo> addHypermediaControls(Todo todo) {
+    return HypermediaRepresentation.Builder.of(todo)
+      .withLink("update")
+      .withLink("delete")
+      .withLink("listAll")
+      .build();
   }
 
 }
