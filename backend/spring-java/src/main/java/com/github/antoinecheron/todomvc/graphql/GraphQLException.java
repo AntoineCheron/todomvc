@@ -1,4 +1,4 @@
-package fr.cheron.antoine.todomvc.graphql;
+package com.github.antoinecheron.todomvc.graphql;
 
 import java.util.List;
 import java.util.stream.Collectors;

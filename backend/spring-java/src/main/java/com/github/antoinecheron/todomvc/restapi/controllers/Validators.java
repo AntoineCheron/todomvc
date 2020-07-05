@@ -1,12 +1,13 @@
-package fr.cheron.antoine.todomvc.restapi.controllers;
+package com.github.antoinecheron.todomvc.restapi.controllers;
 
 import java.util.Optional;
 
-import fr.cheron.antoine.todomvc.restapi.models.ApiError;
-import fr.cheron.antoine.todomvc.commons.models.Status;
-import fr.cheron.antoine.todomvc.restapi.models.TodoCreationRequest;
-import fr.cheron.antoine.todomvc.restapi.models.TodoUpdateRequest;
 import reactor.core.publisher.Mono;
+
+import com.github.antoinecheron.todomvc.restapi.models.ApiError;
+import com.github.antoinecheron.todomvc.commons.models.Status;
+import com.github.antoinecheron.todomvc.restapi.models.TodoCreationRequest;
+import com.github.antoinecheron.todomvc.restapi.models.TodoUpdateRequest;
 
 final class Validators {
 

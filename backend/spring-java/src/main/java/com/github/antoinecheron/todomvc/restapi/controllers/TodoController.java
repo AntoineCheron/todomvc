@@ -1,9 +1,5 @@
-package fr.cheron.antoine.todomvc.restapi.controllers;
+package com.github.antoinecheron.todomvc.restapi.controllers;
 
-import fr.cheron.antoine.todomvc.commons.models.Todo;
-import fr.cheron.antoine.todomvc.restapi.models.TodoCreationRequest;
-import fr.cheron.antoine.todomvc.restapi.models.TodoUpdateRequest;
-import fr.cheron.antoine.todomvc.commons.services.TodoService;
 import org.reactivestreams.Publisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
+
+import com.github.antoinecheron.todomvc.commons.models.Todo;
+import com.github.antoinecheron.todomvc.restapi.models.TodoCreationRequest;
+import com.github.antoinecheron.todomvc.restapi.models.TodoUpdateRequest;
+import com.github.antoinecheron.todomvc.commons.services.TodoService;
 
 @RestController
 @RequestMapping("/rest/todo")

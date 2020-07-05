@@ -1,4 +1,4 @@
-package fr.cheron.antoine.todomvc.commons.models;
+package com.github.antoinecheron.todomvc.commons.models;
 
 import java.util.Collection;
 

@@ -1,8 +1,5 @@
-package fr.cheron.antoine.todomvc.commons.repositories;
+package com.github.antoinecheron.todomvc.commons.repositories;
 
-import fr.cheron.antoine.todomvc.restapi.models.ApiError;
-import fr.cheron.antoine.todomvc.commons.models.Status;
-import fr.cheron.antoine.todomvc.commons.models.Todo;
 import io.r2dbc.spi.ConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.r2dbc.core.DatabaseClient;
@@ -10,6 +7,10 @@ import org.springframework.data.r2dbc.query.Criteria;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import com.github.antoinecheron.todomvc.restapi.models.ApiError;
+import com.github.antoinecheron.todomvc.commons.models.Status;
+import com.github.antoinecheron.todomvc.commons.models.Todo;
 
 @Repository
 public class TodoRepository {

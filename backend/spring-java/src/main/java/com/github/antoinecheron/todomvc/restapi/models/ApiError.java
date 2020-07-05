@@ -1,4 +1,4 @@
-package fr.cheron.antoine.todomvc.restapi.models;
+package com.github.antoinecheron.todomvc.restapi.models;
 
 public class ApiError extends Exception {
 

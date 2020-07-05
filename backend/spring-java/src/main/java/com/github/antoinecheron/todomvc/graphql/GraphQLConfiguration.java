@@ -1,12 +1,9 @@
-package fr.cheron.antoine.todomvc.graphql;
+package com.github.antoinecheron.todomvc.graphql;
 
 import java.io.File;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import fr.cheron.antoine.todomvc.commons.models.Status;
-import fr.cheron.antoine.todomvc.commons.models.Todo;
-import fr.cheron.antoine.todomvc.commons.services.TodoService;
 import graphql.GraphQL;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.idl.RuntimeWiring;
@@ -16,7 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static fr.cheron.antoine.todomvc.graphql.Ok.OK;
+import com.github.antoinecheron.todomvc.commons.models.Status;
+import com.github.antoinecheron.todomvc.commons.models.Todo;
+import com.github.antoinecheron.todomvc.commons.services.TodoService;
+
 import static graphql.schema.idl.RuntimeWiring.newRuntimeWiring;
 
 @Configuration
@@ -80,13 +80,13 @@ public class GraphQLConfiguration {
   private CompletableFuture<Ok> deleteTodoDataFetcher (DataFetchingEnvironment environment) {
     final String id = environment.getArgument("id");
 
-    return this.todoService.delete(id).map(unused -> OK).toFuture();
+    return this.todoService.delete(id).map(unused -> Ok.OK).toFuture();
   }
 
   private CompletableFuture<Ok> deleteTodosDataFetcher (DataFetchingEnvironment environment) {
     final var status = Status.of(environment.<String>getArgument("status").toUpperCase()).orElseThrow();
 
-    return this.todoService.deleteMany(status).map(unused -> OK).toFuture();
+    return this.todoService.deleteMany(status).map(unused -> Ok.OK).toFuture();
   }
 
 }

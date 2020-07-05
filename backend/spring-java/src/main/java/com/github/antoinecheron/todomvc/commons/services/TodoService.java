@@ -1,14 +1,15 @@
-package fr.cheron.antoine.todomvc.commons.services;
+package com.github.antoinecheron.todomvc.commons.services;
 
 import java.util.UUID;
 
-import fr.cheron.antoine.todomvc.commons.models.Status;
-import fr.cheron.antoine.todomvc.commons.models.Todo;
-import fr.cheron.antoine.todomvc.commons.repositories.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import com.github.antoinecheron.todomvc.commons.models.Status;
+import com.github.antoinecheron.todomvc.commons.models.Todo;
+import com.github.antoinecheron.todomvc.commons.repositories.TodoRepository;
 
 @Service
 public class TodoService {
