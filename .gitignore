@@ -6,6 +6,6 @@ target
 out
 .vscode
 .classpath
-.project
 bin/
+.project
 .settings
